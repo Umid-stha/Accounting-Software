@@ -1,0 +1,221 @@
+{% extends 'main.html'%}
+
+{% block content %}
+<style>
+  #chart-container{
+    border-radius: 12px; margin: 10px; padding: 8px;background-color: white;height: 460px;width: 460px;box-shadow: 1px;
+  }
+  #chart-container2 {
+            width: 700px; 
+            height: 460px; 
+            border-radius: 12px; margin: 10px; padding: 8px;background-color: white;box-shadow: 1px;
+  }
+  .graphs{
+    display: flex;
+    flex-direction: row;
+  }
+</style>
+<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+<div class="container mt-5">
+    <h1 class="text-center">Dashboard</h1>
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Total Sales</div>
+                <div class="card-body">
+                    <h5 class="card-title">Rs.{{totalSales}}</h5>
+                    <p class="card-text">Total sales</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Total Purchases</div>
+                <div class="card-body">
+                    <h5 class="card-title">Rs.{{totalPurchase}}</h5>
+                    <p class="card-text">Total purchases</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Total Expenses</div>
+                <div class="card-body">
+                    <h5 class="card-title">Rs.{{totalExpense}}</h5>
+                    <p class="card-text">Total Expenses</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-header">Stock Value</div>
+                <div class="card-body">
+                    <h5 class="card-title">Rs.{{totalStock}}</h5>
+                    <p class="card-text">Current value of stock.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><hr>
+<div class="graphs">
+  <div id="chart-container"><div id="myChart"></div></div>
+  <div id="chart-container2"><div id="myChart2"></div></div>
+</div>
+<script>
+  const mahina={
+    1:'jan',
+    2:'feb',
+    3:'mar',
+    4:'april',
+    5:'may',
+    6:'june',
+    7:'july',
+    8:'aug',
+    9:'sep',
+    10:'oct',
+    11:'nov',
+    12:'dec'
+  }
+  const month = {{ months | safe }}
+  const x = month.map(month => mahina[month])
+  console.log(month)
+  console.log(x)
+ const topProductsData = {{ top_products | safe }};
+
+// Process the data to fit the chart format
+const seriesData = topProductsData.map((item, index) => ({
+    values: [item.total_quantity],
+    "background-color": ["#2D5C23", "#4B9E3B", "#62B554", "#79CC6A", "#B3E5A5", "#d0e6ca"][index],
+    text: item.Product__ProductName
+}));
+
+    var Chardata={
+        "type": "pie",
+  "title": {
+    "text": "Highest Selling Products"
+  },
+  "legend": {
+    "x": "75%",
+    "y": "25%",
+    "border-width": 1,
+    "border-color": "gray",
+    "border-radius": "5px",
+    "header": {
+      "text": "Legend",
+      "font-family": "Georgia",
+      "font-size": 12,
+      "font-color": "#4B9E3B",
+      "font-weight": "normal"
+    },
+    "marker": {
+      "type": "circle"
+    },
+    "toggle-action": "remove",
+    "minimize": true,
+    "icon": {
+      "line-color": "#9999ff"
+    },
+    "max-items": 6,
+    "overflow": "scroll",
+    "width": "25%",
+    "item": {
+    "text-wrap": true,  // Enable text wrapping
+    "max-width": 30    // Adjust max-width as needed
+  }
+  },
+  "plotarea": {
+    "margin-right": "30%",
+    "margin-top": "15%"
+  },
+  "plot": {
+    "animation": {
+      "on-legend-toggle": true, //set to true to show animation and false to turn off
+      "effect": 5,
+      "method": 1,
+      "sequence": 1,
+      "speed": 1
+    },
+    "value-box": {
+      "text": "%v",
+      "font-size": 12,
+      "font-family": "Georgia",
+      "font-weight": "normal",
+      "placement": "out",
+      "font-color": "gray",
+    },
+    "tooltip": {
+      "text": "%t: %v (%npv%)",
+      "font-color": "black",
+      "font-family": "Georgia",
+      "text-alpha": 1,
+      "background-color": "white",
+      "alpha": 0.7,
+      "border-width": 1,
+      "border-color": "#cccccc",
+      "line-style": "dotted",
+      "border-radius": "10px",
+      "padding": "10%",
+      "placement": "node:center"
+    },
+    "border-width": 1,
+    "border-color": "#cccccc",
+    "line-style": "dotted"
+  },
+  "series": seriesData
+};
+    
+    zingchart.render({
+    id: 'myChart',
+    data: Chardata,
+    height: 450,
+    width: 450
+    })
+
+    ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"];
+    var myConfig = {
+      "graphset": [{
+        "type": "bar3d",
+        "title": {
+          "text": "Sales For each month"
+        },
+        plot: {
+          facets: {
+            front: {
+              'background-color': "#4B9E3B"
+            },
+            right: {
+              'background-color': "#4B9E3B"
+            },
+            left: {
+              'background-color': "#4B9E3B"
+            },
+            top: {
+              'background-color': "#d0e6ca"
+            },
+            bottom: {
+              'background-color': "white"
+            }
+          }
+        },
+        "3d-aspect": {
+          "true3d": false
+        },
+        "scale-x": {
+                    "labels": x
+                    },
+        "series": [{
+                    "values": {{ totals | safe }}
+                  }]
+      }]
+    };
+ 
+    zingchart.render({
+      id: 'myChart2',
+      data: myConfig,
+      height: '450',
+      width: '650'
+    });
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<style>
+    .main{
+        margin: 50px;
+    }
+    .cont{
+        background-color: white;
+        border-radius: 16px;
+        padding: 12px;
+    }
+    .btn-delete{
+    background-color: white;
+    border-color: red;
+    color: red;
+    font-size: 1rem;
+    padding: 3px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    }
+    .btn-delete:hover {
+    background-color: red;
+    color: white;
+    }
+    .btn-primary{
+    font-size: 1rem;
+    padding: 3px 6px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    }
+</style>
+<div class="main">
+    <div class="cont">
+        <h3>Are you sure you want to delete {{obj}}??</h3><br>
+        <a href="{{request.META.HTTP_REFERER}}"><button class="btn-primary">Go back</button></a>
+        <form method="POST">
+        {% csrf_token %}
+            <button type="Submit" class="btn btn-delete">Delete</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

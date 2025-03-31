@@ -1,0 +1,23 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<style>
+    h1{
+        margin: 40px;
+    }
+</style>
+<h1 class="text-center">Customer Entry</h1><br>
+<div class="container">
+    <form method="POST" action="">
+        {% csrf_token %}
+    <div id="product-container">
+        {% for field in form %}
+        <div class="form-group">
+            <label for="product">{{field.label}}</label>
+            {{field}}
+        </div>
+        {% endfor %}
+    </div><br>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

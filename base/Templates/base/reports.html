@@ -1,0 +1,54 @@
+{% extends 'main.html'%}
+
+{% block content %}
+<style>
+    .main{
+        display: flex;
+        flex-direction: row;
+    }
+    .Cont{
+        background-color: white;
+        width: 400px;
+        margin: 30px;
+        padding: 20px;
+        border-radius: 12px;
+    }
+    a {
+    color: #4B9E3B;
+    text-decoration: none;
+    display: block;
+    padding: 10px 0;
+    font-size: 22px;
+    }
+    .Cont a:hover {
+        text-decoration: none;
+        color:black;
+    }
+    h1{
+        margin: 40px;
+    }
+    .Reportimg {
+    vertical-align: middle; /* Aligns the image vertically in the middle */
+    margin-right: 15px; /* Adjust spacing between image and text */
+    margin-bottom: 3px;
+    width: 20px; /* Adjust image width as needed */
+    height: auto; /* Ensures aspect ratio is maintained */
+  }
+</style>
+<h1 class="text-center">Reports</h1>
+<div class="main">
+<div class="Cont">
+    <h3>Accounting Reports</h3><br>
+    {% load static %}
+    <a href="{% url 'sales-report' %}"><span><img class='Reportimg' src="{% static 'SaleReport.png' %}">Sales Report</span></a><HR>
+    <a href="{% url 'purchase-report' %}"><span><img class='Reportimg' src="{% static 'PurReport.png' %}">Purchase Report</span></a><HR>
+    <a href="{% url 'expenseReport' %}"><span><img class='Reportimg' src="{% static 'PurReport.png' %}">Expense Report</span></a><HR>    
+    <a href="{% url 'stock-report' %}"><span><img class='Reportimg' src="{% static 'Stock.png' %}">Stock</span></a><HR>
+</div>
+<div class="Cont">
+    <h3>Other reports</h3><br>
+    <a href="{% url 'customer-report' %}"><span><img class='Reportimg' src="{% static 'CusReport.png' %}">Customers</span></a><HR>
+    <a href="{% url 'supplier-report' %}"><span><img class='Reportimg' src="{% static 'CusReport.png' %}">Supplier</span></a><HR>
+</div>
+</div>
+{% endblock %}

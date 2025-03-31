@@ -1,0 +1,2 @@
+CREATE USER Umid WITH PASSWORD '9761882478';
+DB Name- floraandfauna

@@ -1,0 +1,26 @@
+{% load static %}
+<style>
+   .sideImg {
+    vertical-align: middle; /* Aligns the image vertically in the middle */
+    margin-right: 10px; /* Adjust spacing between image and text */
+    margin-bottom: 5px;
+    width: 24px; /* Adjust image width as needed */
+    height: auto; /* Ensures aspect ratio is maintained */
+  }
+  nav a span{
+      transition: all 300ms ease;
+  }
+  nav a span:hover{
+      padding-left: 1rem;
+  }
+</style>
+<nav>
+    <img src="{% static 'logo.jpg' %}"><hr>
+    <a href="{% url 'dashboard' %}"><span><img class='sideImg' src="{% static 'Dashboard.png' %}">Dashboard</span></a><hr>
+    <a href="{% url 'sales' %}"><span><img class='sideImg' src="{% static 'Sales.png' %}">Sales Entry</span></a><hr>
+    <a href="{% url 'purchase' %}"><span><img class='sideImg' src="{% static 'Purchase.png' %}">Purchase Entry</span></a><hr>
+    <a href="{% url 'expense' %}"><span><img class='sideImg' src="{% static 'Expense.png' %}">Expense Entry</span></a><hr>
+    <a href="{% url 'product' %}"><span><img class='sideImg' src="{% static 'Products.png' %}">Products</span></a><hr>
+    <a href="{% url 'Customer' %}"><span><img class='sideImg' src="{% static 'Customers.png' %}">Customer</span></a><hr>
+    <a href="{% url 'reports' %}"><span><img class='sideImg' src="{% static 'reports.png' %}">Reports</span></a><hr>
+</nav>

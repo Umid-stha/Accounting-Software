@@ -1,0 +1,114 @@
+{% extends 'main.html'%}
+{% load custom_filters %}
+
+{% block content %}
+<style>
+    .filter-container{
+        background-color: rgb(255, 255, 255);
+        border-radius: 8px;
+        padding: 10px;
+        margin: 10px;
+    }
+    h1{
+        margin:30px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        background-color: white;
+        border: 2px solid #4B9E3B; 
+        border-radius: 10px; 
+        overflow: hidden;
+        table-layout: auto;
+    }
+    th, td {
+        border: 1px solid #4B9E3B;
+        padding: 8px;
+        text-align: left;
+        overflow: auto;
+    }
+    th {
+        background-color: #4B9E3B;
+        color: white;
+    }
+    td {
+        color: black;
+    }
+    .btn-delete{
+    background-color: white;
+    border-color: red;
+    color: red;
+    font-size: 1rem;
+    padding: 3px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    }
+    .btn-delete:hover {
+    background-color: red;
+    color: white;
+    }
+    .btn-primary{
+        padding: 3px 6px;
+    }
+    .custom-field {
+        width: auto;
+        max-width: 100px;
+    }
+    .custom-field-number {
+        max-width: 80px;
+    }
+</style>
+<Div class="container">
+<h1 class="text-center">Purchase report</h1>
+    <div class="filter-container">
+        <h5>Filter</h5>
+        <form method="GET">
+            <div class="form-row align-items-end">
+                {% for field in filters.form %}
+                <div class="col">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field|add_class:"custom-field" }}
+                </div>
+                {% endfor %}
+            </div><br>
+            <button type="submit" class="btn btn-primary mb-2">Search</button>
+        </form>
+    </div>
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Supplier</th>
+            <th>Supplier Number</th>
+            <th>Payment</th>
+            <th>Discount Percent</th>
+            <th>Total Amount</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for purchase in purchases %}
+        <tr>
+            <td>{{purchase.pur_date}}</td>
+            <td>{{ purchase.Supplier.Sup_Name }}</td>
+            <td>{{ purchase.Supplier.Sup_Number }}</td>
+            <td>{{ purchase.payment_method}} </td>
+            <td>{{ purchase.Discount }} %</td>
+            <td>Rs.{{ purchase.totalAmtPur }}</td>
+            <td>
+                <a href="{% url 'viewPurchase' purchase.id %}"><button class="btn btn-primary">View</button></a>
+                <a href="{% url 'deletePurchase' purchase.id %}"><button class="btn btn-delete">Delete</button></a> 
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<table>
+<tr>
+    <th colspan=4>Total sales</th>
+    <th>Rs.{{total_amount}}</th>
+</tr>
+</table>
+</Div>
+{% endblock %}

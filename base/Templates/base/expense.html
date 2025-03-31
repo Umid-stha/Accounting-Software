@@ -1,0 +1,166 @@
+{% extends 'main.html'%}
+
+{% block content %}
+<style>
+    .main-cont{
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        border: 1px solid #4B9E3B;;
+        padding: 30px;
+        border-radius: 12px;
+    }
+    .text-center{
+        margin: 20px;
+    }
+    .btn-secondary{
+    background-color: white;
+    border-color: #4B9E3B;
+    color: #4B9E3B;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    }
+    .btn-secondary:hover {
+    background-color: #3a7c2c;
+    }
+    .product{
+        width: 300px;
+        border-color: black;
+    }
+    .quantity{
+        width: 75px;
+        border-color: black;
+    }
+    .rate{
+        width: 115px;
+        border-color: black;
+    }
+    .namePur{
+        width: 300px;
+        height: 35px;
+        border-width: 1px;
+        border-radius: 8px;
+        border-color: black;
+        margin: 10px;
+    }
+    #display-Cont{
+        padding: 15px;
+        border-radius: 16px;
+        background-color: white;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+    th, td {
+        border: 1px solid #4B9E3B;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #4B9E3B;
+        color: white;
+    }
+    input.table-input {
+        border: none;
+        width: 100%;
+        box-sizing: border-box;
+    }
+        /* Adjust column widths in the table */
+        #products-table td:nth-child(1) input {
+        width: 250px; /* Wider name column */
+    }
+    #products-table td:nth-child(2) input,
+    #products-table td:nth-child(3) input{
+        width: 50px; /* Thinner stock and price columns */
+    }
+</style>
+
+<form method="POST" action="{% url 'expense' %}">
+    {% csrf_token %}
+    <h1 class="text-center">Expense Entry</h1><br>
+    <label for="Customer">Purchased From:</label>
+    <input type="text" name="PurchaseFrom" class="namePur"/>
+    <br>
+    <div class="main-cont">
+    <div class="container">
+        <div id="product-container">
+            <div class="form-group">
+                <label for="product">Name</label>
+                <input type="text" class="form-control product">
+            </div>
+            <div class="form-group">
+                <label for="Quantity">Quantity</label>
+                <input type="number" class="form-control quantity" id="quantity" >
+            </div>
+            <div class="form-group">
+                <label for="rate">Rate</label>
+                <input type="number" class="form-control rate" id="rate" >
+            </div>
+        </div>
+        <button type="button" class="btn btn-secondary" onclick="addProduct()">Add Expense</button>
+    </div>
+    <div id="display-Cont">
+        <table id="products-table">
+            <thead>
+                <tr>
+                    <th>Particular</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dynamically added rows will go here -->
+            </tbody>
+        </table>
+        <table id="products-table">
+            <tfoot>
+                <th width="500">Total</th>
+                <th><input type="number" class="table-input" id="total" name="total" readonly></th>
+            </tfoot>
+         </table>
+    </div>
+    </div><Br>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+     function addProduct() {
+        let product = $('.product').val();
+        let quantity = $('#quantity').val();
+        let rate = $('#rate').val();
+        let price= quantity*rate;
+
+        if (product && quantity && rate) {
+            let newRow = `<tr>
+                            <td><input type="text" name="names" class="table-input" value="${product}" readonly></td>
+                            <td><input type="number" name="quantities" class="table-input" value="${quantity}" readonly></td>
+                            <td><input type="number" name="rates" class="table-input" value="${rate}" readonly></td>
+                            <td><input type="number" class="table-input price" name="amounts" class="table-input" value="${price}" readonly></td>
+                          </tr>`;
+            $('#products-table tbody').append(newRow);
+            updateTotalPrice();
+
+            // Reset the input fields
+            $('.product').val('');
+            $('#quantity').val('');
+            $('#rate').val('');
+        } else {
+            alert('Please fill in all product details before adding.');
+        }
+    }
+    function updateTotalPrice() {
+        totalPrice = 0;
+        $('#products-table tbody tr').each(function() {
+            let price = parseFloat($(this).find('.price').val());
+            totalPrice += price;
+        });
+        $('#total').val(totalPrice);
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounts</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Bootstrap Datepicker CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <!-- Bootstrap Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    {% load static %}
+    <link href="{% static 'styles.css' %}" rel="stylesheet">
+    <style>
+        body{
+            display:grid;
+            grid-template-columns: 1fr 4fr;
+            background-color: #F0F0F0;
+        }
+        .sidebar{
+            width:300px;
+            margin: 20px;
+            border-radius: 12px;
+            height: fit-content;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        {% include 'Sidebar.html' %}
+    </div>
+    <div class="container">
+    {% block content %}
+
+    {% endblock %}
+    </div>
+</body>
+</html>

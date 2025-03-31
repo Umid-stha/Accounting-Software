@@ -1,0 +1,103 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<style>
+    .main-cont{
+        display: grid;
+        grid-template-columns: 2fr 3fr;
+        border: 1px solid #4B9E3B;;
+        padding: 30px;
+        border-radius: 12px;
+    }
+    .text-center{
+        margin: 20px;
+    }
+    .product{
+        width: 300px;
+        border-color: black;
+    }
+    .quantity{
+        width: 75px;
+        border-color: black;
+    }
+    .rate{
+        width: 115px;
+        border-color: black;
+    }
+    #display-Cont{
+        padding: 15px;
+        border-radius: 16px;
+        background-color: white;
+    }
+    .Cust-Detail{
+        padding: 12px;
+        border-radius: 12px;
+        background-color: white;
+        margin:12px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+    th, td {
+        border: 1px solid #4B9E3B;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #4B9E3B;
+        color: white;
+    }
+    .table-input {
+        border: none;
+        width: 100%;
+        box-sizing: border-box;
+    }
+        /* Adjust column widths in the table */
+        #products-table td:nth-child(1) input {
+        width: 250px; /* Wider name column */
+    }
+    #products-table td:nth-child(2) input,
+    #products-table td:nth-child(3) input{
+        width: 50px; /* Thinner stock and price columns */
+    }
+</style>
+    <h1 class="text-center">Expense Report</h1><br>
+    <div class="main-cont">
+        <div class="Cust-Detail">
+        <h4>Purchased From:{{expense.purchasedFrom}}</h4><hr>
+        <h4>Date: {{ expense.created }}</h4>
+        </div>
+        <div id="display-Cont">
+            <table id="products-table">
+                <thead>
+                    <tr>
+                        <th>Particular</th>
+                        <th>Quantity</th>
+                        <th>Rate</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for detail in expense.expensedetails_set.all %}
+                        <tr>
+                            <td>{{detail.name}}</td>
+                            <td>{{detail.quantity}}</td>
+                            <td>{{detail.rate}}</td>
+                            <td>{{detail.Amount}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <table>
+                <tbody>
+                    <th colspan="3">Total Price</th>
+                    <th style="background-color: white; color:#4B9E3B;">{{expense.total}}</th>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

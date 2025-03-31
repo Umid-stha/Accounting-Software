@@ -1,0 +1,167 @@
+{% extends 'main.html'%}
+{% load custom_filters %}
+
+{% block content %}
+<style>
+    .filter-container{
+        background-color: rgb(255, 255, 255);
+        border-radius: 8px;
+        padding: 10px;
+        margin: 10px;
+    }
+    h1{
+        margin:30px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        background-color: white;
+        border: 2px solid #4B9E3B; 
+        border-radius: 10px; 
+        overflow: hidden;
+        table-layout: auto;
+    }
+    th, td {
+        border: 1px solid #4B9E3B;
+        padding: 8px;
+        text-align: left;
+        overflow: auto;
+    }
+    th {
+        background-color: #4B9E3B;
+        color: white;
+    }
+    td {
+        color: black;
+    }
+    .btn-secondary{
+    background-color: white;
+    border-color: #4B9E3B;
+    color: #4B9E3B;
+    font-size: 1rem;
+    padding: 3px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    }
+    .btn-secondary:hover {
+    background-color: #3a7c2c;
+    }
+    .btn-delete{
+    background-color: white;
+    border-color: red;
+    color: red;
+    font-size: 1rem;
+    padding: 3px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    }
+    .btn-delete:hover {
+    background-color: red;
+    color: white;
+    }
+    .btn-primary{
+        padding: 3px 6px;
+    }
+    .custom-field {
+        width: auto;
+        max-width: 100px;
+    }
+    .custom-field-number {
+        max-width: 80px;
+    }
+</style>
+<Div class="container">
+<h1 class="text-center">Sales report</h1>
+    <div class="filter-container">
+        <h3>Filter</h3>
+        <form method="GET">
+            <div class="form-row align-items-end">
+                {% for field in filters.form %}
+                <div class="col">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field|add_class:"custom-field" }}
+                </div>
+                {% endfor %}
+            </div><br>
+            <button type="submit" class="btn btn-primary mb-2">Search</button>
+        </form>
+    </div>
+    <form method="GET" class="mb-3">
+        {% for key, value in request.GET.items %}
+        {% if key != 'per_page' and key != 'page' %}
+        <input type="hidden" name="{{ key }}" value="{{ value }}">
+        {% endif %}
+        {% endfor %}
+        <label for="perPageSelect">Items per page:</label>
+        <select name="per_page" id="perPageSelect" class="form-select" onchange="this.form.submit()">
+            <option value="10" {% if per_page == '10' %}selected{% endif %}>10</option>
+            <option value="25" {% if per_page == '25' %}selected{% endif %}>25</option>
+            <option value="100" {% if per_page == '100' %}selected{% endif %}>100</option>
+            <option value="all" {% if per_page == 'all' %}selected{% endif %}>All</option>
+        </select>
+    </form>
+<table>
+    <thead>
+        <tr>
+            <th>Bill No.</th>
+            <th>Date</th>
+            <th>Customer</th>
+            <th>Customer Number</th>
+            <th>Payment</th>
+            <th>Discount Percent</th>
+            <th>Total Amount</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for sale in sales %}
+        <tr>
+            <td>{{sale.bill_no }}</td>
+            <td>{{sale.sale_date}}</td>
+            <td>{{ sale.Customer.Cus_Name }}</td>
+            <td>{{ sale.Customer.Cus_Number }}</td>
+            <td>{{ sale.payment_method }}</td>
+            <td>{{ sale.Discount }} %</td>
+            <td>Rs.{{ sale.TotalAmt }}</td>
+            <td>
+                <a href="{% url 'viewSales' sale.id %}"><button class="btn btn-primary">View</button></a>
+                <a href="{% url 'deleteSales' sale.id %}" ><button class="btn btn-delete">Delete</button></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+    <table>
+        <tr>
+            <th colspan=4>Total sales</th>
+            <th>Rs.{{total_amount}}</th>
+        </tr>
+    </table>
+     <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if sales.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ sales.previous_page_number }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+
+            {% for num in sales.paginator.page_range %}
+            <li class="page-item {% if sales.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}">{{ num }}</a>
+            </li>
+            {% endfor %}
+
+            {% if sales.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ sales.next_page_number }}{% if request.GET.filter %}&filter={{ request.GET.filter }}{% endif %}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</Div>
+{% endblock %}
